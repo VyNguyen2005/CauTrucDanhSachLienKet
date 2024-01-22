@@ -8,14 +8,14 @@ namespace SingleLinkList
 {
     class Node
     {
-        private int info;
+        private float info;
         private Node next;
-        public Node(int x)
+        public Node(float x)
         {
             info = x;
             next = null;
         }
-        public int Info
+        public float Info
         {
             set { info = value; }
             get { return info; }
@@ -33,13 +33,13 @@ namespace SingleLinkList
         {
             Head = null;
         }
-        public void AddHead(int x)
+        public void AddHead(float x)
         {
             Node p = new Node(x);
             p.Next = Head;
             Head = p;
         }
-        public void AddLast(int x)
+        public void AddLast(float x)
         {
             Node p = new Node(x);
             if(Head == null)
@@ -85,9 +85,58 @@ namespace SingleLinkList
             Node p = Head;
             while(p!=null)
             {
-                Console.WriteLine($"{p.Info}");
+                Console.Write($"{p.Info}  ");
                 p = p.Next;
             }
+        }
+        public void DeleteNode(float x)
+        {
+            Node p = Head;
+            Node q = null;
+            while(p!=null && p.Info != x)
+            {
+                q = p;
+                p = p.Next;
+            }
+            if(p!=null)
+            {
+                if(p== Head)
+                {
+                    DeleteHead();
+                }
+                else
+                {
+                    q.Next = p.Next;
+                    p.Next = null;
+                }
+            }
+        }
+        public Node findMax()
+        {
+            Node max = Head;
+            Node p = Head.Next;
+            while(p!=null)
+            {
+                if(p.Info > max.Info)
+                {
+                    max = p;
+                }
+                p = p.Next;
+            }
+            return max;
+        }
+        public float CalAvg()
+        {
+            float sum = 0;
+            int count = 0;
+            Node p = Head;
+            while(p!=null)
+            {
+                sum += p.Info;
+                count++;
+                p = p.Next;
+            }
+            return sum / count;
         }
 
     }
@@ -96,22 +145,39 @@ namespace SingleLinkList
         static void Main(string[] args)
         {
             SingleLinkList l = new SingleLinkList();
-            l.AddHead(5);
-            l.AddHead(7);
-            l.AddLast(8);
-            l.AddHead(9);
-            Console.WriteLine("Link List: ");
+            EnterList(l);
+            Console.WriteLine("\nLink List: ");
             l.ProcessList();
 
-            l.DeleteHead();
-            Console.WriteLine("Link List after DeleteHead: ");
+            Console.WriteLine("\nLink List after DeleteHead: ");
             l.ProcessList();
 
             l.DeleteLast();
-            Console.WriteLine("Link List after DeleteLast: ");
+            Console.WriteLine("\nLink List after DeleteLast: ");
             l.ProcessList();
 
+            Console.WriteLine("\nEnter Node value need delete: ");
+            float x = float.Parse(Console.ReadLine());
+            l.DeleteNode(x);
+
+            Console.WriteLine($"\nNode max: {l.findMax().Info}");
+            
+            Console.WriteLine($"\nAverage value: {l.CalAvg()}");
+
             Console.ReadLine();
+        }
+        static void EnterList(SingleLinkList l)
+        {
+            string chon = "y";
+            float x;
+            while(chon != "n")
+            {
+                Console.Write("Nhap gia tri nut: ");
+                x = float.Parse(Console.ReadLine());
+                l.AddHead(x);
+                Console.Write("Tiep tuc (y/n): ");
+                chon = Console.ReadLine();
+            }
         }
     }
 }
